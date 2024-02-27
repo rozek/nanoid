@@ -9,6 +9,7 @@
     "url"
   ],
   "scripts": {
+    "build": "rimraf dist && microbundle",
     "clean": "rm -rf coverage",
     "start": "vite test/demo/ --open",
     "test:coverage": "c8 pnpm bnt",
@@ -17,6 +18,11 @@
     "test": "pnpm run /^test:/"
   },
   "type": "module",
+  "main": "./dist/nanoid.cjs",
+  "module": "./dist/nanoid.esm.js",
+  "svelte": "./dist/nanoid.esm.js",
+  "umd:main": "./dist/nanoid.umd.js",
+  "types": "./dist/nanoid.d.ts",
   "engines": {
     "node": "^18 || >=20"
   },
@@ -31,8 +37,10 @@
   "repository": "ai/nanoid",
   "exports": {
     ".": {
+      "types": "./dist/nanoid.d.ts",
+      "require": "./dist/nanoid.cjs",
       "browser": "./index.browser.js",
-      "default": "./index.js"
+      "default": "./dist/nanoid.modern.js"
     },
     "./non-secure": "./non-secure/index.js",
     "./package.json": "./package.json"
@@ -67,7 +75,9 @@
     "eslint-plugin-perfectionist": "^2.5.0",
     "eslint-plugin-prefer-let": "^3.0.1",
     "eslint-plugin-promise": "^6.1.1",
+    "microbundle": "^0.15.1",
     "picocolors": "^1.0.0",
+    "rimraf": "^3.0.2",
     "rndm": "^1.2.0",
     "secure-random-string": "^1.1.3",
     "shortid": "^2.2.16",
