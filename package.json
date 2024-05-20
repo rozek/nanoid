@@ -22,7 +22,7 @@
   "module": "./dist/nanoid.esm.js",
   "svelte": "./dist/nanoid.esm.js",
   "umd:main": "./dist/nanoid.umd.js",
-  "types": "./dist/nanoid.d.ts",
+  "types": "./index.d.ts",
   "engines": {
     "node": "^18 || >=20"
   },
@@ -37,7 +37,7 @@
   "repository": "ai/nanoid",
   "exports": {
     ".": {
-      "types": "./dist/nanoid.d.ts",
+      "types": "./index.d.ts",
       "require": "./dist/nanoid.cjs",
       "browser": "./index.browser.js",
       "default": "./dist/nanoid.modern.js"
