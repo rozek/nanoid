@@ -40,7 +40,6 @@
       "types": "./dist/nanoid.d.ts",
       "require": "./dist/nanoid.cjs",
       "browser": "./index.browser.js",
-      "types": "./dist/nanoid.d.ts",
       "default": "./dist/nanoid.modern.js"
     },
     "./non-secure": "./non-secure/index.js",
