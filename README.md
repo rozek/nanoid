@@ -36,23 +36,24 @@ model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
 
 ## Table of Contents
 
-* [Comparison with UUID](#comparison-with-uuid)
-* [Benchmark](#benchmark)
-* [Security](#security)
-* [Install](#install)
-* [API](#api)
-  * [Blocking](#blocking)
-  * [Non-Secure](#non-secure)
-  * [Custom Alphabet or Size](#custom-alphabet-or-size)
-  * [Custom Random Bytes Generator](#custom-random-bytes-generator)
-* [Usage](#usage)
-  * [React](#react)
-  * [React Native](#react-native)
-  * [PouchDB and CouchDB](#pouchdb-and-couchdb)
-  * [Web Workers](#web-workers)
-  * [CLI](#cli)
-  * [Other Programming Languages](#other-programming-languages)
-* [Tools](#tools)
+- [Table of Contents](#table-of-contents)
+- [Comparison with UUID](#comparison-with-uuid)
+- [Benchmark](#benchmark)
+- [Security](#security)
+- [Install](#install)
+- [API](#api)
+  - [Blocking](#blocking)
+  - [Non-Secure](#non-secure)
+  - [Custom Alphabet or Size](#custom-alphabet-or-size)
+  - [Custom Random Bytes Generator](#custom-random-bytes-generator)
+- [Usage](#usage)
+  - [React](#react)
+  - [React Native](#react-native)
+  - [PouchDB and CouchDB](#pouchdb-and-couchdb)
+  - [Web Workers](#web-workers)
+  - [CLI](#cli)
+  - [Other Programming Languages](#other-programming-languages)
+- [Tools](#tools)
 
 
 ## Comparison with UUID
@@ -132,7 +133,13 @@ npm install nanoid
 ```
 
 Nano ID 5 works only with ESM projects, in tests or Node.js scripts.
-For CommonJS you need Nano ID 3.x (we still support it):
+For CommonJS you need to use Node.js 22 with `--experimental-require-module`:
+
+```bash
+node --experimental-require-module app.js
+```
+
+Or you can use Nano ID 3.x (we still support it):
 
 ```bash
 npm install nanoid@3
@@ -408,7 +415,7 @@ the same ID generator on the client and server side.
 * [Haskell](https://github.com/MichelBoucey/NanoID)
 * [Haxe](https://github.com/flashultra/uuid)
 * [Janet](https://sr.ht/~statianzo/janet-nanoid/)
-* [Java](https://github.com/aventrix/jnanoid)
+* [Java](https://github.com/Soundicly/jnanoid-enhanced)
 * [Kotlin](https://github.com/viascom/nanoid-kotlin)
 * [MySQL/MariaDB](https://github.com/viascom/nanoid-mysql-mariadb)
 * [Nim](https://github.com/icyphox/nanoid.nim)
