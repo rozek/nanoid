@@ -3,7 +3,7 @@
 <img src="https://ai.github.io/nanoid/logo.svg" align="right"
      alt="Логотип Nano ID от Антона Ловчикова" width="180" height="94">
 
-[English](./README.md) | **Русский** | [简体中文](./README.zh-CN.md) | [Bahasa Indonesia](./README.id-ID.md)
+[English](./README.md) | [日本語](./README.ja.md) | **Русский** | [简体中文](./README.zh-CN.md) | [Bahasa Indonesia](./README.id-ID.md) | [한국어](./README.ko.md)
 
 Генератор уникальных ID для JavaScript — лёгкий, безопасный,
 ID можно применять в URL.
@@ -11,7 +11,7 @@ ID можно применять в URL.
 > «Поразительный уровень бессмысленного перфекционизма,
 > который просто невозможно не уважать»
 
-- **Лёгкий.** 116 байт (после минификации и Brotli). Без зависимостей.
+- **Лёгкий.** 118 байт (после минификации и Brotli). Без зависимостей.
   [Size Limit] следит за размером.
 - **Безопасный.** Использует аппаратный генератор случайных чисел.
   Можно использовать в кластерах машин.
@@ -33,7 +33,7 @@ model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
 
 ---
 
-<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Сделано в <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Злых марсианах</a></b>, продуктовом консалитнге для <b>инструментов разработки</b>.
+<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Сделано в <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Злых марсианах</a></b>, продуктовом консалтинге для <b>инструментов разработки</b>.
 
 ---
 
@@ -45,6 +45,10 @@ model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
 - [Сравнение производительности](#сравнение-производительности)
 - [Безопасность](#безопасность)
 - [Подключение](#подключение)
+  - [ESM](#esm)
+  - [CommonJS](#commonjs)
+  - [JSR](#jsr)
+  - [CDN](#cdn)
 - [API](#api)
   - [Блокирующий](#блокирующий)
   - [Небезопасный](#небезопасный)
@@ -54,8 +58,8 @@ model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
   - [React](#react)
   - [React Native](#react-native)
   - [PouchDB и CouchDB](#pouchdb-и-couchdb)
-  - [Веб-воркеры](#веб-воркеры)
   - [Терминал](#терминал)
+  - [TypeScript](#typescript)
   - [Другие языки программирования](#другие-языки-программирования)
 - [Инструменты](#инструменты)
 
@@ -82,22 +86,22 @@ Nano ID похож на UUID v4 (случайный).
 
 ```rust
 $ node ./test/benchmark.js
-crypto.randomUUID         28,398,328 ops/sec
-uuid v4                   10,254,199 ops/sec
-@napi-rs/uuid             15,110,625 ops/sec
-uid/secure                10,388,842 ops/sec
-@lukeed/uuid               8,914,507 ops/sec
-nanoid                     7,484,029 ops/sec
-customAlphabet             4,867,017 ops/sec
-nanoid for browser           609,426 ops/sec
-secure-random-string         539,080 ops/sec
-uid-safe.sync                533,944 ops/sec
-shortid                       59,609 ops/sec
+crypto.randomUUID          7,619,041 ops/sec
+uuid v4                    7,436,626 ops/sec
+@napi-rs/uuid              4,730,614 ops/sec
+uid/secure                 4,729,185 ops/sec
+@lukeed/uuid               4,015,673 ops/sec
+nanoid                     3,693,964 ops/sec
+customAlphabet             2,799,255 ops/sec
+nanoid for browser           380,915 ops/sec
+secure-random-string         362,316 ops/sec
+uid-safe.sync                354,234 ops/sec
+shortid                       38,808 ops/sec
 
 Non-secure:
-uid                       95,579,977 ops/sec
-nanoid/non-secure          3,999,766 ops/sec
-rndm                       3,981,914 ops/sec
+uid                       11,872,105 ops/sec
+nanoid/non-secure          2,226,483 ops/sec
+rndm                       2,308,044 ops/sec
 ```
 
 Среда сравнения: Framework 13 7840U, Fedora 39, Node.js 21.6.
@@ -135,22 +139,58 @@ _См. также хорошую статью о теориях генерато
 
 ## Подключение
 
+### ESM
+
+Nano ID 5 работает с ESM-проектами (`import`) в тестах или скриптах для Node.js.
+
 ```bash
 npm install nanoid
 ```
 
-Nano ID 5 работает только с ESM-проектами, в тестах или скриптах для Node.js.
-Для CommonJS вам нужна Node.js 22 с флагом `--experimental-require-module`:
+### CommonJS
+
+На проектах с CommonJS вы можете использовать:
+
+- `require()` будет работать в последней версия Node.js 22.12 (из коробки)
+  или Node.js 20 (с флагом `--experimental-require-module`).
+
+- В более старых версиях Node.js можно использовать динамический импорт:
+
+  ```js
+  let nanoid
+  module.exports.createID = async () => {
+    if (!nanoid) ({ nanoid } = await import('nanoid'))
+    return nanoid() // => "V1StGXR8_Z5jdHi6B-myT"
+  }
+  ```
+
+- Или можно просто взять Nano ID 3.x (мы его всё ещё поддерживаем):
+
+  ```bash
+  npm install nanoid@3
+  ```
+
+### JSR
+
+[JSR](https://jsr.io) это замена npm с открытым управлением
+и активной разработкой (в отличие от npm).
 
 ```bash
-node --experimental-require-module app.js
+npx jsr add @sitnik/nanoid
 ```
 
-Или возьмите Nano ID 3.x (мы ещё всё ещё поддерживаем):
+Вы можете использовать пакет с JSR в Node.js, Deno, Bun.
 
-```bash
-npm install nanoid@3
+```js
+// Replace `nanoid` to `@sitnik/nanoid` in all imports
+import { nanoid } from '@sitnik/nanoid'
 ```
+
+Для Deno установите через `deno add jsr:@sitnik/nanoid`
+или импортируйте `jsr:@sitnik/nanoid`.
+
+
+### CDN
 
 Для быстрого прототипирования вы можете подключить Nano ID с CDN без установки.
 Не используйте этот способ на реальном сайте, так как он сильно бьёт
@@ -334,22 +374,6 @@ db.put({
 ```
 
 
-### Веб-воркеры
-
-Веб-воркеры не имеют доступа к аппаратному генератору случайных чисел.
-
-Аппаратный генератор нужен, в том числе, для непредсказуемости ID. Например,
-когда доступ к секретному документу защищён ссылкой с уникальным ID.
-
-Если вам не нужна непредсказуемость ID, то в Веб-воркере можно использовать
-небезопасный генератор ID.
-
-```js
-import { nanoid } from 'nanoid/non-secure'
-nanoid() //=> "Uakgb_J5m9g-0JDMbcJqLJ"
-```
-
-
 ### Терминал
 
 Можно сгенерировать уникальный ID прямо из терминала, вызвав `npx nanoid`.
@@ -377,6 +401,30 @@ $ npx nanoid --alphabet abc --size 15
 bccbcabaabaccab
 ```
 
+### TypeScript
+
+Nano ID позволяет приводить сгенерированные строки к непрозрачным строкам в
+TypeScript. Например:
+
+```ts
+declare const userIdBrand: unique symbol
+type UserId = string & { [userIdBrand]: true }
+
+// Используйте явный параметр типа:
+mockUser(nanoid<UserId>())
+
+interface User {
+  id: UserId
+  name: string
+}
+
+const user: User = {
+  // Автоматически приводится к типу UserId:
+  id: nanoid(),
+  name: 'Alice'
+}
+```
+
 ### Другие языки программирования
 
 Nano ID был портирован на множество языков. Это полезно, чтобы сервер и клиент
@@ -388,13 +436,13 @@ Nano ID был портирован на множество языков. Это
 - [ColdFusion/CFML](https://github.com/JamoCA/cfml-nanoid)
 - [Crystal](https://github.com/mamantoha/nanoid.cr)
 - [Dart и Flutter](https://github.com/pd4d10/nanoid-dart)
-- [Deno](https://github.com/ianfabs/nanoid)
 - [Elixir](https://github.com/railsmechanic/nanoid)
+- [Gleam](https://github.com/0xca551e/glanoid)
 - [Go](https://github.com/jaevor/go-nanoid)
 - [Haskell](https://github.com/MichelBoucey/NanoID)
 - [Haxe](https://github.com/flashultra/uuid)
 - [Janet](https://sr.ht/~statianzo/janet-nanoid/)
-- [Java](https://github.com/Soundicly/jnanoid-enhanced)
+- [Java](https://github.com/wosherco/jnanoid-enhanced)
 - [Kotlin](https://github.com/viascom/nanoid-kotlin)
 - [MySQL/MariaDB](https://github.com/viascom/nanoid-mysql-mariadb)
 - [Nim](https://github.com/icyphox/nanoid.nim)

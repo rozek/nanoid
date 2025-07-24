@@ -57,6 +57,13 @@ for (let type of ['node', 'browser']) {
       }
     })
 
+    test(`avoids pool pollution, infinite loop`, () => {
+      nanoid(2.1)
+      let second = nanoid()
+      let third = nanoid()
+      notEqual(second, third)
+    })
+
     test(`has flat distribution`, () => {
       let COUNT = 100 * 1000
       let LENGTH = nanoid().length
@@ -117,6 +124,15 @@ for (let type of ['node', 'browser']) {
     test(`${type} / customAlphabet / changes size`, () => {
       let nanoidA = customAlphabet('a')
       equal(nanoidA(10), 'aaaaaaaaaa')
+    })
+
+    test(`${type} / customAlphabet / avoids pool pollution, infinite loop`, () => {
+      let ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
+      let nanoid2 = customAlphabet(ALPHABET)
+      nanoid2(2.1)
+      let second = nanoid2()
+      let third = nanoid2()
+      notEqual(second, third)
     })
 
     test(`${type} / customRandom / supports generator`, () => {

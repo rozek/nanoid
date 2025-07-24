@@ -1,3 +1,5 @@
+/* @ts-self-types="./index.d.ts" */
+
 // This alphabet uses `A-Za-z0-9_-` symbols.
 // The order of characters is optimized for better gzip and brotli compression.
 // References to the same file (works both for gzip and brotli):
@@ -11,7 +13,7 @@ export let customAlphabet = (alphabet, defaultSize = 21) => {
   return (size = defaultSize) => {
     let id = ''
     // A compact alternative for `for (var i = 0; i < step; i++)`.
-    let i = size
+    let i = size | 0
     while (i--) {
       // `| 0` is more compact and faster than `Math.floor()`.
       id += alphabet[(Math.random() * alphabet.length) | 0]
@@ -23,7 +25,7 @@ export let customAlphabet = (alphabet, defaultSize = 21) => {
 export let nanoid = (size = 21) => {
   let id = ''
   // A compact alternative for `for (var i = 0; i < step; i++)`.
-  let i = size
+  let i = size | 0
   while (i--) {
     // `| 0` is more compact and faster than `Math.floor()`.
     id += urlAlphabet[(Math.random() * 64) | 0]

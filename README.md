@@ -3,14 +3,14 @@
 <img src="https://ai.github.io/nanoid/logo.svg" align="right"
      alt="Nano ID logo by Anton Lovchikov" width="180" height="94">
 
-**English** | [Русский](./README.ru.md) | [简体中文](./README.zh-CN.md) | [Bahasa Indonesia](./README.id-ID.md)
+**English** | [日本語](./README.ja.md) | [Русский](./README.ru.md) | [简体中文](./README.zh-CN.md) | [Bahasa Indonesia](./README.id-ID.md) | [한국어](./README.ko.md)
 
 A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
 
 > “An amazing level of senseless perfectionism,
 > which is simply impossible not to respect.”
 
-* **Small.** 116 bytes (minified and brotlied). No dependencies.
+* **Small.** 118 bytes (minified and brotlied). No dependencies.
   [Size Limit] controls the size.
 * **Safe.** It uses hardware random generator. Can be used in clusters.
 * **Short IDs.** It uses a larger alphabet than UUID (`A-Za-z0-9_-`).
@@ -25,7 +25,7 @@ model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
 
 ---
 
-<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Made in <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Evil Martians</a></b>, product consulting for <b>developer tools</b>.
+<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Made at <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Evil Martians</a></b>, product consulting for <b>developer tools</b>.
 
 ---
 
@@ -41,6 +41,10 @@ model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
 - [Benchmark](#benchmark)
 - [Security](#security)
 - [Install](#install)
+  - [ESM](#esm)
+  - [CommonJS](#commonjs)
+  - [JSR](#jsr)
+  - [CDN](#cdn)
 - [API](#api)
   - [Blocking](#blocking)
   - [Non-Secure](#non-secure)
@@ -50,8 +54,8 @@ model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
   - [React](#react)
   - [React Native](#react-native)
   - [PouchDB and CouchDB](#pouchdb-and-couchdb)
-  - [Web Workers](#web-workers)
   - [CLI](#cli)
+  - [TypeScript](#typescript)
   - [Other Programming Languages](#other-programming-languages)
 - [Tools](#tools)
 
@@ -77,22 +81,22 @@ There are two main differences between Nano ID and UUID v4:
 
 ```rust
 $ node ./test/benchmark.js
-crypto.randomUUID         28,398,328 ops/sec
-uuid v4                   10,254,199 ops/sec
-@napi-rs/uuid             15,110,625 ops/sec
-uid/secure                10,388,842 ops/sec
-@lukeed/uuid               8,914,507 ops/sec
-nanoid                     7,484,029 ops/sec
-customAlphabet             4,867,017 ops/sec
-nanoid for browser           609,426 ops/sec
-secure-random-string         539,080 ops/sec
-uid-safe.sync                533,944 ops/sec
-shortid                       59,609 ops/sec
+crypto.randomUUID          7,619,041 ops/sec
+uuid v4                    7,436,626 ops/sec
+@napi-rs/uuid              4,730,614 ops/sec
+uid/secure                 4,729,185 ops/sec
+@lukeed/uuid               4,015,673 ops/sec
+nanoid                     3,693,964 ops/sec
+customAlphabet             2,799,255 ops/sec
+nanoid for browser           380,915 ops/sec
+secure-random-string         362,316 ops/sec
+uid-safe.sync                354,234 ops/sec
+shortid                       38,808 ops/sec
 
 Non-secure:
-uid                       95,579,977 ops/sec
-nanoid/non-secure          3,999,766 ops/sec
-rndm                       3,981,914 ops/sec
+uid                       11,872,105 ops/sec
+nanoid/non-secure          2,226,483 ops/sec
+rndm                       2,308,044 ops/sec
 ```
 
 Test configuration: Framework 13 7840U, Fedora 39, Node.js 21.6.
@@ -128,22 +132,59 @@ Test configuration: Framework 13 7840U, Fedora 39, Node.js 21.6.
 
 ## Install
 
+### ESM
+
+Nano ID 5 works with ESM projects (with `import`) in tests or Node.js scripts.
+
 ```bash
 npm install nanoid
 ```
 
-Nano ID 5 works only with ESM projects, in tests or Node.js scripts.
-For CommonJS you need to use Node.js 22 with `--experimental-require-module`:
+### CommonJS
+
+Nano ID can be used with CommonJS in one of the following ways:
+
+- You can use `require()` to import Nano ID. You need to use latest Node.js
+  22.12 (works out-of-the-box) or Node.js 20
+  (with `--experimental-require-module`).
+
+- For Node.js 18 you can dynamically import Nano ID as follows:
+
+  ```js
+  let nanoid
+  module.exports.createID = async () => {
+    if (!nanoid) ({ nanoid } = await import('nanoid'))
+    return nanoid() // => "V1StGXR8_Z5jdHi6B-myT"
+  }
+  ```
+
+- You can use Nano ID 3.x (we still support it):
+
+  ```bash
+  npm install nanoid@3
+  ```
+
+### JSR
+
+[JSR](https://jsr.io) is a replacement for npm with open governance
+and active development (in contrast to npm).
 
 ```bash
-node --experimental-require-module app.js
+npx jsr add @sitnik/nanoid
 ```
 
-Or you can use Nano ID 3.x (we still support it):
+You can use it in Node.js, Deno, Bun, etc.
 
-```bash
-npm install nanoid@3
+```js
+// Replace `nanoid` to `@sitnik/nanoid` in all imports
+import { nanoid } from '@sitnik/nanoid'
 ```
+
+For Deno install it by `deno add jsr:@sitnik/nanoid` or import
+from `jsr:@sitnik/nanoid`.
+
+
+### CDN
 
 For quick hacks, you can load Nano ID from CDN. Though, it is not recommended
 to be used in production because of the lower loading performance.
@@ -151,7 +192,6 @@ to be used in production because of the lower loading performance.
 ```js
 import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
 ```
-
 
 ## API
 
@@ -354,23 +394,6 @@ db.put({
 ```
 
 
-### Web Workers
-
-Web Workers do not have access to a secure random generator.
-
-Security is important in IDs when IDs should be unpredictable.
-For instance, in "access by URL" link generation.
-If you do not need unpredictable IDs, but you need to use Web Workers,
-you can use the non‑secure ID generator.
-
-```js
-import { nanoid } from 'nanoid/non-secure'
-nanoid() //=> "Uakgb_J5m9g-0JDMbcJqLJ"
-```
-
-Note: non-secure IDs are more prone to collision attacks.
-
-
 ### CLI
 
 You can get unique ID in terminal by calling `npx nanoid`. You need only
@@ -397,25 +420,49 @@ $ npx nanoid --alphabet abc --size 15
 bccbcabaabaccab
 ```
 
+### TypeScript
+
+Nano ID allows casting generated strings into opaque strings in TypeScript.
+For example:
+
+```ts
+declare const userIdBrand: unique symbol
+type UserId = string & { [userIdBrand]: true }
+
+// Use explicit type parameter:
+mockUser(nanoid<UserId>())
+
+interface User {
+  id: UserId
+  name: string
+}
+
+const user: User = {
+  // Automatically casts to UserId:
+  id: nanoid(),
+  name: 'Alice'
+}
+```
 
 ### Other Programming Languages
 
 Nano ID was ported to many languages. You can use these ports to have
 the same ID generator on the client and server side.
 
+* [C](https://github.com/lukateras/nanoid.h)
 * [C#](https://github.com/codeyu/nanoid-net)
 * [C++](https://github.com/mcmikecreations/nanoid_cpp)
 * [Clojure and ClojureScript](https://github.com/zelark/nano-id)
 * [ColdFusion/CFML](https://github.com/JamoCA/cfml-nanoid)
 * [Crystal](https://github.com/mamantoha/nanoid.cr)
 * [Dart & Flutter](https://github.com/pd4d10/nanoid-dart)
-* [Deno](https://github.com/ianfabs/nanoid)
 * [Elixir](https://github.com/railsmechanic/nanoid)
+* [Gleam](https://github.com/0xca551e/glanoid)
 * [Go](https://github.com/matoous/go-nanoid)
 * [Haskell](https://github.com/MichelBoucey/NanoID)
 * [Haxe](https://github.com/flashultra/uuid)
 * [Janet](https://sr.ht/~statianzo/janet-nanoid/)
-* [Java](https://github.com/Soundicly/jnanoid-enhanced)
+* [Java](https://github.com/wosherco/jnanoid-enhanced)
 * [Kotlin](https://github.com/viascom/nanoid-kotlin)
 * [MySQL/MariaDB](https://github.com/viascom/nanoid-mysql-mariadb)
 * [Nim](https://github.com/icyphox/nanoid.nim)

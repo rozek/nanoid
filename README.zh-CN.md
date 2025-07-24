@@ -3,13 +3,13 @@
 <img src="https://ai.github.io/nanoid/logo.svg" align="right"
      alt="Nano ID logo by Anton Lovchikov" width="180" height="94">
 
-[English](./README.md) | [Русский](./README.ru.md) | **简体中文** | [Bahasa Indonesia](./README.id-ID.md)
+[English](./README.md) | [日本語](./README.ja.md) | [Русский](./README.ru.md) | **简体中文** | [Bahasa Indonesia](./README.id-ID.md) | [한국어](./README.ko.md)
 
 一个小巧、安全、URL友好、唯一的 JavaScript 字符串ID生成器。
 
 > “一个惊人的无意义的完美主义水平，这简直让人无法不敬佩。”
 
-* **小巧.** 116字节 (经过压缩和Brotli处理)。没有依赖。[Size Limit] 控制大小。
+* **小巧.** 118字节 (经过压缩和Brotli处理)。没有依赖。[Size Limit] 控制大小。
 * **安全.** 它使用硬件随机生成器。可在集群中使用。
 * **紧凑.** 它使用比 UUID（`A-Za-z0-9_-`）更大的字母表。因此，ID 大小从36个符号减少到21个符号。
 * **可移植.** Nano ID 已被移植到 [20种编程语言](#其他编程语言)。
@@ -27,29 +27,30 @@ model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
 
 ---
 
-<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Made in <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Evil Martians</a></b>, product consulting for <b>developer tools</b>.
+<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Made at <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Evil Martians</a></b>, product consulting for <b>developer tools</b>.
 
 ---
 
 ## 目录
 
-* [与 UUID 的比较](#与-uuid-的比较)
-* [基准值](#基准值)
-* [安全性](#安全性)
-* [安装](#安装)
-* [API](#api)
-  * [阻塞](#阻塞)
-  * [不安全](#不安全)
-  * [自定义字母或大小](#自定义字母或大小)
-  * [自定义随机字节生成器](#自定义随机字节生成器)
-* [用法](#用法)
-  * [React](#react)
-  * [React Native](#react-native)
-  * [PouchDB and CouchDB](#pouchdb-and-couchdb)
-  * [Web Workers](#web-workers)
-  * [CLI](#cli)
-  * [其他编程语言](#other-programming-languages)
-* [工具](#工具)
+- [目录](#目录)
+- [与 UUID 的比较](#与-uuid-的比较)
+- [基准值](#基准值)
+- [安全性](#安全性)
+- [安装](#安装)
+- [API](#api)
+  - [阻塞](#阻塞)
+  - [不安全](#不安全)
+  - [自定义字母或大小](#自定义字母或大小)
+  - [自定义随机字节生成器](#自定义随机字节生成器)
+- [用法](#用法)
+  - [React](#react)
+  - [React Native](#react-native)
+  - [PouchDB and CouchDB](#pouchdb-and-couchdb)
+  - [CLI](#cli)
+  - [TypeScript](#typescript)
+  - [其他编程语言](#其他编程语言)
+- [工具](#工具)
 
 
 ## 与 UUID 的比较
@@ -72,22 +73,22 @@ Nano ID 和 UUID v4之间有两个主要区别:
 
 ```rust
 $ node ./test/benchmark.js
-crypto.randomUUID         28,398,328 ops/sec
-uuid v4                   10,254,199 ops/sec
-@napi-rs/uuid             15,110,625 ops/sec
-uid/secure                10,388,842 ops/sec
-@lukeed/uuid               8,914,507 ops/sec
-nanoid                     7,484,029 ops/sec
-customAlphabet             4,867,017 ops/sec
-nanoid for browser           609,426 ops/sec
-secure-random-string         539,080 ops/sec
-uid-safe.sync                533,944 ops/sec
-shortid                       59,609 ops/sec
+crypto.randomUUID          7,619,041 ops/sec
+uuid v4                    7,436,626 ops/sec
+@napi-rs/uuid              4,730,614 ops/sec
+uid/secure                 4,729,185 ops/sec
+@lukeed/uuid               4,015,673 ops/sec
+nanoid                     3,693,964 ops/sec
+customAlphabet             2,799,255 ops/sec
+nanoid for browser           380,915 ops/sec
+secure-random-string         362,316 ops/sec
+uid-safe.sync                354,234 ops/sec
+shortid                       38,808 ops/sec
 
 Non-secure:
-uid                       95,579,977 ops/sec
-nanoid/non-secure          3,999,766 ops/sec
-rndm                       3,981,914 ops/sec
+uid                       11,872,105 ops/sec
+nanoid/non-secure          2,226,483 ops/sec
+rndm                       2,308,044 ops/sec
 ```
 
 测试配置: Framework 13 7840U, Fedora 39, Node.js 21.6.
@@ -327,23 +328,6 @@ db.put({
 ```
 
 
-### Web Workers
-
-Web Workers 无法访问安全的随机生成器.
-
-当ID应该是不可预测的时候，安全性对ID很重要。
-例如，在 "按 URL 访问"的链接生成中。
-如果你不需要不可预测的 ID，但你需要使用 Web Workers。
-你可以使用非安全的 ID 生成器。
-
-```js
-import { nanoid } from 'nanoid/non-secure'
-nanoid() //=> "Uakgb_J5m9g-0JDMbcJqLJ"
-```
-
-注意：非安全的ID更容易受到碰撞攻击。
-
-
 ### CLI
 
 你可以通过调用 `npx nanoid` 在终端获得唯一的 ID。你只需要
@@ -369,6 +353,28 @@ $ npx nanoid --alphabet abc --size 15
 bccbcabaabaccab
 ```
 
+### TypeScript
+
+Nano ID 允许将生成的字符串转换为 TypeScript 中的不透明字符串。 例如：
+
+```ts
+declare const userIdBrand: unique symbol
+type UserId = string & { [userIdBrand]: true }
+
+// 使用显式类型参数:
+mockUser(nanoid<UserId>())
+
+interface User {
+  id: UserId
+  name: string
+}
+
+const user: User = {
+  // 自动转换为 UserId:
+  id: nanoid(),
+  name: 'Alice'
+}
+```
 
 ### 其他编程语言
 
@@ -382,11 +388,12 @@ Nano ID 已被移植到许多语言。 你可以使用下面这些移植，获�
 * [Dart & Flutter](https://github.com/pd4d10/nanoid-dart)
 * [Deno](https://github.com/ianfabs/nanoid)
 * [Elixir](https://github.com/railsmechanic/nanoid)
+* [Gleam](https://github.com/0xca551e/glanoid)
 * [Go](https://github.com/jaevor/go-nanoid)
 * [Haskell](https://github.com/MichelBoucey/NanoID)
 * [Haxe](https://github.com/flashultra/uuid)
 * [Janet](https://sr.ht/~statianzo/janet-nanoid/)
-* [Java](https://github.com/Soundicly/jnanoid-enhanced)
+* [Java](https://github.com/wosherco/jnanoid-enhanced)
 * [Kotlin](https://github.com/viascom/nanoid-kotlin)
 * [MySQL/MariaDB](https://github.com/viascom/nanoid-mysql-mariadb)
 * [Nim](https://github.com/icyphox/nanoid.nim)

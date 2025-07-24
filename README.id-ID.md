@@ -3,14 +3,14 @@
 <img src="https://ai.github.io/nanoid/logo.svg" align="right"
      alt="Logo Nano ID oleh Anton Lovchikov" width="180" height="94">
 
-[English](./README.md) | [Русский](./README.ru.md) | [简体中文](./README.zh-CN.md) | **Bahasa Indonesia**
+[English](./README.md) | [日本語](./README.ja.md) | [Русский](./README.ru.md) | [简体中文](./README.zh-CN.md) | **Bahasa Indonesia** | [한국어](./README.ko.md)
 
 Sebuah generator ID yang unik dalam bentuk string yang ringan, aman, serta _URL-friendly_ untuk JavaScript.
 
 > "Sebuah tingkat kesempurnaan yang luar biasa,
 > yang mana tidak mungkin untuk tidak dihormati."
 
-- **Ringan.** Hanya 116 bytes (diperkecil dan brotlied). Tidak ada ketergantungan (dependencies) apapun. [Size Limit](https://github.com/ai/size-limit) mengatur ukuran dari generator ini.
+- **Ringan.** Hanya 118 bytes (diperkecil dan brotlied). Tidak ada ketergantungan (dependencies) apapun. [Size Limit](https://github.com/ai/size-limit) mengatur ukuran dari generator ini.
 - **Aman.** Nano ID menggunakan RNG yang terdapat pada perangkat keras. Dapat digunakan dalam lingkungan seperti klaster.
 - **ID yang pendek.** Nano ID menggunakan alfabet yang lebih banyak ketimbang UUID (`A-Za-z0-9_-`), karenanya ukuran ID menjadi berkurang dari 36 menjadi 21 simbol.
 - **Portabel.** Nano ID telah dimigrasi untuk [20 bahasa pemrograman lainnya](#bahasa-pemrograman-lainnya).
@@ -24,13 +24,14 @@ Mendukung penjelajah (browser) modern, IE [dengan Babel](https://developer.epage
 
 ---
 
-<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Made in <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Evil Martians</a></b>, product consulting for <b>developer tools</b>.
+<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Made at <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Evil Martians</a></b>, product consulting for <b>developer tools</b>.
 
 ---
 
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Perbandingan dengan UUID](#perbandingan-dengan-uuid)
 - [Benchmark](#benchmark)
 - [Keamanan](#keamanan)
@@ -38,14 +39,14 @@ Mendukung penjelajah (browser) modern, IE [dengan Babel](https://developer.epage
 - [API](#api)
   - [Blocking](#blocking)
   - [Non-Secure](#non-secure)
-  - [Alfabet dan Ukuran (Custom)](#alfabet-dan-ukuran-penyesuaian)
+  - [Alfabet dan Ukuran (Custom)](#alfabet-dan-ukuran-custom)
   - [Generasi Random Bytes (Custom)](#generasi-random-bytes-custom)
 - [Penggunaan](#penggunaan)
   - [React](#react)
   - [React Native](#react-native)
   - [PouchDB dan CouchDB](#pouchdb-dan-couchdb)
-  - [Web Workers](#web-workers)
   - [CLI](#cli)
+  - [TypeScript](#typescript)
   - [Bahasa Pemrograman Lainnya](#bahasa-pemrograman-lainnya)
 - [Alat](#alat)
 
@@ -66,22 +67,22 @@ Ada dua buah perbedaan antara Nano ID dan UUID v4:
 
 ```rust
 $ node ./test/benchmark.js
-crypto.randomUUID         28,398,328 ops/sec
-uuid v4                   10,254,199 ops/sec
-@napi-rs/uuid             15,110,625 ops/sec
-uid/secure                10,388,842 ops/sec
-@lukeed/uuid               8,914,507 ops/sec
-nanoid                     7,484,029 ops/sec
-customAlphabet             4,867,017 ops/sec
-nanoid for browser           609,426 ops/sec
-secure-random-string         539,080 ops/sec
-uid-safe.sync                533,944 ops/sec
-shortid                       59,609 ops/sec
+crypto.randomUUID          7,619,041 ops/sec
+uuid v4                    7,436,626 ops/sec
+@napi-rs/uuid              4,730,614 ops/sec
+uid/secure                 4,729,185 ops/sec
+@lukeed/uuid               4,015,673 ops/sec
+nanoid                     3,693,964 ops/sec
+customAlphabet             2,799,255 ops/sec
+nanoid for browser           380,915 ops/sec
+secure-random-string         362,316 ops/sec
+uid-safe.sync                354,234 ops/sec
+shortid                       38,808 ops/sec
 
 Non-secure:
-uid                       95,579,977 ops/sec
-nanoid/non-secure          3,999,766 ops/sec
-rndm                       3,981,914 ops/sec
+uid                       11,872,105 ops/sec
+nanoid/non-secure          2,226,483 ops/sec
+rndm                       2,308,044 ops/sec
 ```
 
 Konfigurasi pengujian: Framework 13 7840U, Fedora 39, Node.js 21.6.
@@ -275,20 +276,6 @@ db.put({
 ```
 
 
-### Web Workers
-
-Web Workers tidak memiliki akses untuk secure random generator.
-
-Keamanan sangat penting pada ID yang mana setiap ID harus memiliki sifat tidak bisa diprediksi, seperti pada contoh use-case generasi link pada "access by URL". Apabila tidak memerlukan ID yang tidak bisa diprediksi, tetapi ingin/harus menggunakan Web Workers, dapat digunakan NanoID dengan API non-secure.
-
-```js
-import { nanoid } from 'nanoid/non-secure'
-nanoid() //=> "Uakgb_J5m9g-0JDMbcJqLJ"
-```
-
-Perhatian: ID yang dihasilkan dari non-secure dapat lebih mudah tabrakan / memiliki probabilitas collision yang lebih besar.
-
-
 ### CLI
 
 Nano ID dapat didapatkan dengan cara menggunakan `npx nanoid` pada Terminal. Hanya diperlukan Node.js untuk ini, dan tidak perlu mengunduh dan menginstall Nano ID dalam sistem.
@@ -301,6 +288,29 @@ LZfXLFzPPR4NNrgjlWDxn
 
 Bila ingin mengganti alfabet atau ukuran ID, dapat menggunakan [`nanoid-cli`](https://github.com/twhitbeck/nanoid-cli).
 
+### TypeScript
+
+Nano ID memungkinkan untuk mengubah string yang dihasilkan menjadi string opak
+dalam TypeScript. Sebagai contoh:
+
+```ts
+declare const userIdBrand: unique symbol
+type UserId = string & { [userIdBrand]: true }
+
+// Gunakan parameter tipe secara eksplisit:
+mockUser(nanoid<UserId>())
+
+interface User {
+  id: UserId
+  name: string
+}
+
+const user: User = {
+  // Secara otomatis diubah menjadi UserId:
+  id: nanoid(),
+  name: 'Alice'
+}
+```
 
 ### Bahasa Pemrograman Lainnya
 
@@ -314,11 +324,12 @@ Nano ID telah bermigrasi ke berbagai macam bahasa. Seluruh versi dapat digunakan
 - [Dart & Flutter](https://github.com/pd4d10/nanoid-dart)
 - [Deno](https://github.com/ianfabs/nanoid)
 - [Elixir](https://github.com/railsmechanic/nanoid)
+- [Gleam](https://github.com/0xca551e/glanoid)
 - [Go](https://github.com/jaevor/go-nanoid)
 - [Haskell](https://github.com/MichelBoucey/NanoID)
 - [Haxe](https://github.com/flashultra/uuid)
 - [Janet](https://sr.ht/~statianzo/janet-nanoid/)
-- [Java](https://github.com/Soundicly/jnanoid-enhanced)
+- [Java](https://github.com/wosherco/jnanoid-enhanced)
 - [Kotlin](https://github.com/viascom/nanoid-kotlin)
 - [MySQL/MariaDB](https://github.com/viascom/nanoid-mysql-mariadb)
 - [Nim](https://github.com/icyphox/nanoid.nim)
